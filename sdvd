@@ -1,0 +1,57 @@
+var todobtn = document.getElementById('button');
+var todoinput = document.getElementById('input');
+var todolist = document.getElementById('todo-list');
+todobtn.addEventListener('click', addTodo);
+todolist.addEventListener('click', delettodo);
+function addTodo(e) {
+
+    e.preventDefault()
+    var input = todoinput.value;
+    let local = localStorage.getItem('local');
+    if (local == null) {
+        var arr = [];
+    }
+    else {
+        arr = JSON.parse(local);
+    }
+    arr.push(input);
+    localStorage.setItem("local", JSON.stringify(arr));
+    showtask();
+}
+function showtask() {
+  
+    let local = localStorage.getItem('local');
+    debugger;
+    if (local == null) {
+        arr = [];
+    }
+    else {
+        arr = JSON.parse(local);
+    }
+
+    let html = '';
+    arr.forEach((item) => {
+        html += `<div>
+               <li class='list-items'>${item}</li>
+               <button class="edit">edt</button>
+               <button class="delect">delect</button>
+               </div> `
+    });
+    todolist.innerHTML = html;
+    todoinput.value = '';
+}
+showtask();
+function delettodo(e) {
+    var item = e.target
+    if (item.classList[0] === 'delect') {
+        const todo = item.parentElement;
+        todo.remove()
+        localStorage.clear('local')
+    }
+    else if(item.classList[0]='edit' ){
+      
+    var edit=prompt('please edit',item.parentElement.childNodes[1].innerHTML)  
+    item.parentElement.childNodes[1].innerHTML=edit;
+    
+    }
+}
